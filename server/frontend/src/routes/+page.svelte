@@ -18,7 +18,7 @@
 
 	const downloadExtension = (name = 'force-login') => {
 		window.open(
-			`https://github.com/keeyank/Invisible-Interventions/raw/main/extensions/_crx/${name}.crx`,
+			`https://github.com/tjbck/invisible-interventions/raw/main/extensions/_crx/${name}.crx`,
 			'_self'
 		);
 
