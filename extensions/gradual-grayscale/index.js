@@ -129,8 +129,12 @@ chrome.storage.local.get().then((result) => {
 
     // Activate the intervention after a week (60sec * 60 * 24 * 7)
     if (
-      Math.round(Date.now() / 1000) >
-      result.installation_timestamp + 60 * 60 * 24 * 5
+      (result.user_id % 2 == 0 &&
+        Math.round(Date.now() / 1000) <
+          result.installation_timestamp + 60 * 60 * 24 * 7) ||
+      (result.user_id % 2 == 1 &&
+        Math.round(Date.now() / 1000) >
+          result.installation_timestamp + 60 * 60 * 24 * 7)
     ) {
       // Activate only if not already activated
       chrome.storage.local.get("activated", (result) => {
@@ -197,6 +201,19 @@ chrome.storage.local.get().then((result) => {
       //   }
       // }, 100);
     } else {
+      // Activate only if intervention has been activated before
+      chrome.storage.local.get("activated", (result) => {
+        if (result.activated === true) {
+          chrome.storage.local.set({ activated: false }, () => {
+            showModal(
+              "The intervention has been disabled, feel free to use the app as you normally would for another week."
+            );
+            console.log("Intervention disabled for the first time");
+          });
+        } else {
+          console.log("The intervention is currently disabled");
+        }
+      });
       tracking(result.user_id, "inactive");
     }
   }

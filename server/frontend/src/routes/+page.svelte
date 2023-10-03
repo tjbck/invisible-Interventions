@@ -2,7 +2,13 @@
 	import { ENDPOINT } from '$lib/constants';
 	import toast from 'svelte-french-toast';
 
-	const interventions = ['force-login', 'gradual-grayscale', 'time-limit', 'tap-to-scroll', 'vibration-scroll','shake-to-continue'];
+	const interventions = [
+		'force-login',
+		'gradual-grayscale',
+		'time-limit',
+		'tap-to-scroll',
+		'vibration-scroll'
+	];
 	let selectedIntervention = '';
 	let submitted = false;
 
@@ -49,9 +55,9 @@
 				});
 
 			if (res && res.id) {
-				// 1,2,3,4
+				// 0,1,2,3,4
 				submitted = true;
-				selectedIntervention = interventions[res.id % 6];
+				selectedIntervention = interventions[res.id % 5];
 			}
 		} else {
 			toast.error('Please complete all required form inputs.');
