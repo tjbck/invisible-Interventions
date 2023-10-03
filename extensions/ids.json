@@ -2,5 +2,7 @@
     "tap-to-scroll": "Tap To Scroll Intervention",
     "force-login": "Force Login Intervention",
     "gradual-grayscale": "Gradual Grayscale Intervention",
-    "time-limit": "Time Limit Intervention"
+    "time-limit": "Time Limit Intervention",
+    "vibration-scroll": "Vibration Scroll Intervention",
+    "shake-to-continue": "Shake To Continue Intervention"
 }
