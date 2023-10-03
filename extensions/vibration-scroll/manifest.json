@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
-  "name": "Gradual Grayscale",
-  "description": "With every touch, it gradually transforms your screen to grayscale",
+  "name": "Vibration Scroll",
+  "description": "Each time you touch your screen, your phone will gently vibrate",
   "version": "1.0",
   "icons": {
     "16": "images/icon-16.png",

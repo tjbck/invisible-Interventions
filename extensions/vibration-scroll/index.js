@@ -129,7 +129,6 @@ chrome.storage.local.get().then((result) => {
 
     // if user_id % 2 == 0, Activate the intervention after a week (60sec * 60 * 24 * 7)
     // if user_id % 2 == 1, Activate the intervention now and disable after a week
-
     if (
       (result.user_id % 2 == 0 &&
         Math.round(Date.now() / 1000) <
@@ -143,7 +142,7 @@ chrome.storage.local.get().then((result) => {
         if (result.activated === undefined) {
           chrome.storage.local.set({ activated: true }, () => {
             showModal(
-              "From this moment on, with each touch, your screen will slowly turn grayscale. This visual cue is designed to raise awareness of your screen time and promote a healthier relationship with the app. As you engage with Tik Tok, you will be gently reminded to take breaks and be mindful of your usage, allowing you to stay in control of your time spent on the platform."
+              "Starting now, each time you touch your screen, your phone will gently vibrate. This tactile cue is intended to help you become more aware of your screen interactions and encourage a healthier relationship with your device. As you use your phone, these vibrations will serve as gentle reminders to take breaks and be mindful of your screen time, empowering you to stay in control of your usage."
             );
             console.log("Intervention activated for the first time");
           });
@@ -152,7 +151,7 @@ chrome.storage.local.get().then((result) => {
         }
       });
 
-      tracking(result.user_id, "gradual-grayscale");
+      tracking(result.user_id, "vibration-scroll");
 
       //////////////////
       // Intervention
@@ -164,44 +163,30 @@ chrome.storage.local.get().then((result) => {
         "position:fixed;width:100vw;height:100vh;z-index:999999;background:transparent;pointer-events: none;backdrop-filter:grayscale(0)";
       document.body.insertBefore(overlayElement, document.body.firstChild);
 
-      // Updates the grayscale value by the specified delta.
-      // @param delta - The amount by which the grayscale value should be updated.
-      // @return True if the grayscale value is successfully updated, False otherwise.
-      const updateGrayscale = (delta = 0.01) => {
-        console.log("updateGrayscale");
-        console.log(overlayElement.style.backdropFilter);
-        let grayscale = parseFloat(
-          overlayElement.style.backdropFilter.slice(10, -1)
-        );
-
-        if (grayscale >= 1) {
-          // If the grayscale value reaches 100%
-          // alert("You've reached your limit!");
-          return false;
-        } else {
-          console.log(grayscale);
-          grayscale += delta;
-          overlayElement.style.backdropFilter = `grayscale(${grayscale})`;
-          return true;
-        }
+      const vibrate = () => {
+        navigator.vibrate([500]);
       };
 
-      // Touch-based Transition
-      // This function facilitates the transition effect through touch interaction by updating
-      // the grayscale value of the displayed content on each touch event.
+      function stopVibrations() {
+        // You can also stop an ongoing vibration pattern by specifying a vibration
+        // length of zero.
+        navigator.vibrate(0);
+      }
+
       document.body.addEventListener("touchstart", (e) => {
-        updateGrayscale(0.05);
+        console.log("touchstart");
+        vibrate();
       });
 
-      // Time-based Transition
-      // This function enables a time-based transition effect by periodically updating the grayscale value
-      // of the displayed content at a fixed default interval value of 100 milliseconds.
-      // Uncomment the following and comment out the code above to try it out:
-      // const interval = setInterval(() => {
-      //   if (!updateGrayscale()) {
-      //     clearInterval(interval);
-      //   }
-      // }, 100);
+      // document.body.addEventListener("touchmove", (e) => {
+      //   console.log("touchmove");
+      //   vibrate();
+      // });
+
+      // document.body.addEventListener("touchend", (e) => {
+      //   console.log("touchend");
+      //   stopVibrations();
+      // });
     } else {
       // Activate only if intervention has been activated before
       chrome.storage.local.get("activated", (result) => {
