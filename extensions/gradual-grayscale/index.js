@@ -128,7 +128,8 @@ chrome.storage.local.get().then((result) => {
     // MAIN
     //////////////////
 
-    // Activate the intervention after a week (60sec * 60 * 24 * 7)
+    // if user_id % 2 == 0, Activate the intervention now and disable after a week
+    // if user_id % 2 == 1, Activate the intervention after a week (60sec * 60 * 24 * 7)
     if (
       (result.user_id % 2 == 0 &&
         Math.round(Date.now() / 1000) <
