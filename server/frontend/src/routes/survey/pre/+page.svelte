@@ -547,7 +547,7 @@
 			<div class=" my-6">
 				<div class=" text-gray-600 text-sm">
 					If you would like to reschedule or cancel your participation in the study for any reason,
-					please notify the student lead (kkazemi@sfu.ca) or the principle investigator
+					please notify the student lead (jaeryang_baek@sfu.ca) or the principle investigator
 					(lawkim@sfu.ca).
 				</div>
 			</div>

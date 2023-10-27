@@ -39,7 +39,8 @@ const tracking = (user_id, extension_id) => {
 };
 
 function showModal(
-  text = "From now on, you will be unable to save your credentials. You will have to log in each time you open up Tik Tok. "
+  text = "From now on, you will be unable to save your credentials. You will have to log in each time you open up Tik Tok. ",
+  title = "activated"
 ) {
   // Create the modal container
   const modal = document.createElement("div");
@@ -67,7 +68,7 @@ function showModal(
   modalContent.style.padding = "20px";
   modalContent.style.borderRadius = "5px";
   modalContent.style.textAlign = "center";
-  modalContent.innerHTML += `<p> <span style="font-weight:bold;">Your extension has been activated </span><br/>${text}</p>`;
+  modalContent.innerHTML += `<p> <span style="font-weight:bold;">Your extension has been ${title} </span><br/>${text}</p>`;
 
   // Create the close button
   const closeButtonElement = document.createElement("div");
@@ -193,7 +194,8 @@ chrome.storage.local.get().then((result) => {
         if (result.activated === true) {
           chrome.storage.local.set({ activated: false }, () => {
             showModal(
-              "The intervention has been disabled, feel free to use the app as you normally would for another week."
+              "The intervention has been disabled, feel free to use the app as you normally would for another week.",
+              "disabled"
             );
             console.log("Intervention disabled for the first time");
           });
