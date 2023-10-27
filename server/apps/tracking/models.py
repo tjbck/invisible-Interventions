@@ -8,6 +8,8 @@ class SignUpUser(Base):
     __tablename__ = "sign_up_users"
     id = Column(Integer, primary_key=True, index=True)
     email = Column(String, unique=True)
+    name = Column(String)
+    date = Column(DateTime)
 
 
 class User(Base):

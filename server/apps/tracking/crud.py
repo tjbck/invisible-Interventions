@@ -21,8 +21,10 @@ def get_users(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.User).offset(skip).limit(limit).all()
 
 
-def create_sign_up_user(db: Session, email: str):
-    db_signup_user = models.SignUpUser(email=email)
+def create_sign_up_user(db: Session, date: str, name: str, email: str):
+    db_signup_user = models.SignUpUser(
+        date=datetime.strptime(date, "%Y-%m-%d"), name=name, email=email
+    )
 
     db.add(db_signup_user)
     db.commit()

@@ -85,14 +85,20 @@ def read_user(user_id: int, db: Session = Depends(get_db)):
 @app.post("/users/signup")
 def create_sign_up_user(form: schemas.SignUpForm, db: Session = Depends(get_db)):
     user_count = crud.get_sign_up_user_count(db)
-    if user_count <= 90:
-        db_sign_up_user = crud.get_sign_up_user_by_email(db, email=form.email)
-        if db_sign_up_user:
-            # If user already exists, return user
-            return db_sign_up_user
-        return crud.create_sign_up_user(db, email=form.email)
+    print(f"create_sign_up_user {user_count}")
+    db_sign_up_user = crud.get_sign_up_user_by_email(db, email=form.email)
+    if db_sign_up_user:
+        # If user already exists, return user
+        return db_sign_up_user
+    elif user_count <= 120:
+        return crud.create_sign_up_user(
+            db, date=form.date, name=form.name, email=form.email
+        )
     else:
-        raise HTTPException(status_code=404, detail="Max # of Users Reached")
+        raise HTTPException(
+            status_code=404,
+            detail="We're sorry! Our research program is at full capacity. Thank you for your interest, but we are unable to accept new participants at this time.",
+        )
 
 
 @app.get("/users/signup/count", response_model=int)

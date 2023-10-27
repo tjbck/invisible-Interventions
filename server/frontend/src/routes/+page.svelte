@@ -1,18 +1,23 @@
 <script>
 	import { ENDPOINT } from '$lib/constants';
 	import toast from 'svelte-french-toast';
+	import dayjs from 'dayjs';
 
 	const interventions = [
-		'force-login',
 		'gradual-grayscale',
 		'time-limit',
 		'tap-to-scroll',
-		'vibration-scroll'
+		'vibration-scroll',
+		'shake-to-continue'
 	];
 	let selectedIntervention = '';
 	let submitted = false;
 
+	let checkboxElement = null;
+
 	let formData = {
+		date: dayjs().format('YYYY-MM-DD'),
+		name: '',
 		email: ''
 	};
 
@@ -35,32 +40,43 @@
 	};
 
 	const submitForm = async () => {
-		if (formData.email !== '') {
-			const res = await fetch(`${ENDPOINT}/tracking/users/signup`, {
-				method: 'POST',
-				headers: {
-					Accept: 'application/json',
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify({ email: formData.email })
-			})
-				.then(async (res) => {
-					if (!res.ok) throw await res.json();
-					return await res.json();
+		console.log(checkboxElement);
+		if (checkboxElement.checked) {
+			if (formData.email !== '' && formData.name !== '') {
+				const res = await fetch(`${ENDPOINT}/tracking/users/signup`, {
+					method: 'POST',
+					headers: {
+						Accept: 'application/json',
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({
+						date: formData.date,
+						email: formData.email,
+						name: formData.name
+					})
 				})
-				.catch((err) => {
-					console.log(err);
-					toast.error(err.detail);
-					return null;
-				});
+					.then(async (res) => {
+						if (!res.ok) throw await res.json();
+						return await res.json();
+					})
+					.catch((err) => {
+						console.log(err);
+						toast.error(err.detail);
+						return null;
+					});
 
-			if (res && res.id) {
-				// 0,1,2,3,4
-				submitted = true;
-				selectedIntervention = interventions[res.id % 5];
+				if (res && res.id !== undefined) {
+					// 0,1,2,3,4
+					submitted = true;
+					selectedIntervention = interventions[res.id % 5];
+				}
+
+				console.log(formData);
+			} else {
+				toast.error('Please complete all required form inputs.');
 			}
 		} else {
-			toast.error('Please complete all required form inputs.');
+			toast.error('Please consent to the consent form.');
 		}
 	};
 </script>
@@ -77,7 +93,7 @@
 		<div class="flex justify-center">
 			<img src="/sfu.png" alt="sfu logo" />
 		</div>
-		<div class="text-xl text-gray-600 font-semibold">Download Extensions</div>
+		<div class="text-xl text-gray-600 font-semibold">Participate in a Study!</div>
 
 		<div>
 			<div class="mb-5 text-sm text-gray-600 break-words">
@@ -108,8 +124,90 @@
 				</div>
 			</div>
 		</div>
+		<hr class="my-6" />
+
+		<div>
+			<div class="text-xl text-gray-600 font-semibold">Intervention Set-up Instructions</div>
+
+			<div class="mt-2 text-sm text-gray-600 break-words">
+				<a
+					class=" underline"
+					href="https://drive.google.com/file/d/1eb6Xb25-2LV54AeiHnM37xRnm-cEAMWy/view?usp=drive_link"
+					>Click here for a video tutorial outlining the steps below</a
+				>
+			</div>
+
+			<div class="mt-2 text-sm text-gray-700 break-words">
+				<li>Delete the Tik Tok app from your phone.</li>
+
+				<li>
+					<a
+						href="https://play.google.com/store/apps/details?id=com.kiwibrowser.browser"
+						class=" underline">Download and install the Kiwi Browser from the Google Play Store.</a
+					>
+				</li>
+				<li>
+					On your phone, download the crx file which includes all of the extension contents from
+					this website by submitting your email address above.
+				</li>
+
+				<li>Open the Kiwi Browser on your Android phone.</li>
+				<li>
+					Tap on the three vertical dots in the top-right corner to open the menu. Select
+					"Extensions" from the menu. In the Extensions menu, enable "Developer mode" by toggling
+					the switch.
+				</li>
+
+				<li>
+					Tap on "+ (from .zip/.crx/.user.js)" and navigate to the folder where you downloaded the
+					extension. Select the crx extension file and tap "OK" to install it.
+				</li>
+
+				<li>The extension should now be installed and visible in the Extensions menu.</li>
+
+				<li>
+					Open up the <a href="https://tiktok.com/" class=" underline">Tik Tok website</a> , and a pre-study
+					survey will be automatically opened. Complete this survey, and you will have officially begun
+					the study!
+				</li>
+
+				<li>
+					At this point, feel free to use the Kiwi browser with Tik Tok open as if it is the Tik Tok
+					application itself. While you use Tik Tok, we will be gathering usage data for us to
+					analyze after the study has been completed.
+				</li>
+			</div>
+		</div>
 	{:else}
 		<form on:submit={submitForm}>
+			<div class=" my-6">
+				<label for="date" class="block mb-2 text-sm text-gray-900">Date</label>
+				<input
+					disabled
+					type="date"
+					id="date"
+					bind:value={formData.date}
+					class="bg-gray-50 border border-gray-100 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 disabled:text-gray-500 disabled:bg-gray-200 block w-full p-3"
+					required
+				/>
+			</div>
+
+			<div class=" my-6">
+				<label for="name" class="block mb-2 text-sm text-gray-900">Participant Name</label>
+				<input
+					type="text"
+					id="name"
+					bind:value={formData.name}
+					class="bg-gray-50 border border-gray-100 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 disabled:text-gray-500 disabled:bg-gray-200 block w-full p-3"
+					placeholder="Your full name"
+					required
+					autocomplete="name"
+				/>
+				<div class="mt-2 text-xs text-gray-500 text-right">
+					<span>REQUIRED</span>
+				</div>
+			</div>
+
 			<div class=" my-6">
 				<label for="email" class="block mb-2 text-sm text-gray-900">Participant Email</label>
 				<input
@@ -121,6 +219,34 @@
 					required
 					autocomplete="email"
 				/>
+				<div class="mt-2 text-xs text-gray-500 text-right">
+					<span>REQUIRED</span>
+				</div>
+			</div>
+
+			<div class=" my-6">
+				<label for="email" class="block mb-2 text-sm text-gray-900">Consent Form</label>
+
+				<div class=" text-sm text-purple-900 underline">
+					<a
+						href="https://drive.google.com/file/d/1qUy-EIVPdW0N2Rzimv_E2piF3h1vOAFM/view?usp=sharing"
+						target="_blank">Consent Form Link</a
+					>
+				</div>
+				<div class="flex text-sm text-gray-600">
+					<input
+						type="checkbox"
+						bind:this={checkboxElement}
+						class="w-4 h-4 mt-1.5 mr-2 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+						required
+					/>
+					<div class=" mt-1">
+						I have thoroughly read and understood the content of the consent form for the research
+						study. I hereby acknowledge and agree with all the terms and conditions outlined in the
+						document. I willingly consent to participate in the research and understand my rights
+						and responsibilities as a participant.
+					</div>
+				</div>
 				<div class="mt-2 text-xs text-gray-500 text-right">
 					<span>REQUIRED</span>
 				</div>
@@ -156,97 +282,5 @@
 				</div>
 			</div>
 		</form>
-
-		<!-- <div class="">
-		<div
-			class="mb-3 text-sm text-center font-semibold w-full rounded-lg py-4 px-5 text-green-800 bg-green-100 hover:bg-green-300 transition-all cursor-pointer"
-			on:click={() => {
-				downloadExtension('force-login');
-			}}
-		>
-			Download Force Login Intervention
-		</div>
-
-		<div
-			class="mb-3 text-sm text-center font-semibold w-full rounded-lg py-4 px-5 text-green-800 bg-green-100 hover:bg-green-300 transition-all cursor-pointer"
-			on:click={() => {
-				downloadExtension('gradual-grayscale');
-			}}
-		>
-			Download Gradual Grayscale Intervention
-		</div>
-
-		<div
-			class="mb-3 text-sm text-center font-semibold w-full rounded-lg py-4 px-5 text-green-800 bg-green-100 hover:bg-green-300 transition-all cursor-pointer"
-			on:click={() => {
-				downloadExtension('tap-to-scroll');
-			}}
-		>
-			Download Tap To Scroll Intervention
-		</div>
-
-		<div
-			class="mb-3 text-sm text-center font-semibold w-full rounded-lg py-4 px-5 text-green-800 bg-green-100 hover:bg-green-300 transition-all cursor-pointer"
-			on:click={() => {
-				downloadExtension('time-limit');
-			}}
-		>
-			Download Time Limit Intervention
-		</div>
-	</div> -->
 	{/if}
-
-	<hr class="my-6" />
-
-	<div>
-		<div class="text-xl text-gray-600 font-semibold">Intervention Set-up Instructions</div>
-
-		<div class="mt-2 text-sm text-gray-600 break-words">
-			<a
-				class=" underline"
-				href="https://drive.google.com/file/d/1eb6Xb25-2LV54AeiHnM37xRnm-cEAMWy/view?usp=drive_link"
-				>Click here for a video tutorial outlining the steps below</a
-			>
-		</div>
-
-		<div class="mt-2 text-sm text-gray-700 break-words">
-			<li>Delete the Tik Tok app from your phone.</li>
-
-			<li>
-				<a
-					href="https://play.google.com/store/apps/details?id=com.kiwibrowser.browser"
-					class=" underline">Download and install the Kiwi Browser from the Google Play Store.</a
-				>
-			</li>
-			<li>
-				On your phone, download the crx file which includes all of the extension contents from this
-				website by submitting your email address above.
-			</li>
-
-			<li>Open the Kiwi Browser on your Android phone.</li>
-			<li>
-				Tap on the three vertical dots in the top-right corner to open the menu. Select "Extensions"
-				from the menu. In the Extensions menu, enable "Developer mode" by toggling the switch.
-			</li>
-
-			<li>
-				Tap on "+ (from .zip/.crx/.user.js)" and navigate to the folder where you downloaded the
-				extension. Select the crx extension file and tap "OK" to install it.
-			</li>
-
-			<li>The extension should now be installed and visible in the Extensions menu.</li>
-
-			<li>
-				Open up the <a href="https://tiktok.com/" class=" underline">Tik Tok website</a> , and a pre-study
-				survey will be automatically opened. Complete this survey, and you will have officially begun
-				the study!
-			</li>
-
-			<li>
-				At this point, feel free to use the Kiwi browser with Tik Tok open as if it is the Tik Tok
-				application itself. While you use Tik Tok, we will be gathering usage data for us to analyze
-				after the study has been completed.
-			</li>
-		</div>
-	</div>
 </div>

@@ -10,6 +10,8 @@ from typing import List, Optional
 
 
 class SignUpUserBase(BaseModel):
+    date: str
+    name: str
     email: str
 
 
@@ -21,6 +23,8 @@ class SignUpuser(SignUpUserBase):
 
 
 class SignUpForm(BaseModel):
+    date: str
+    name: str
     email: str
 
 
