@@ -172,8 +172,7 @@ chrome.storage.local.get().then((result) => {
         if (result.activated === undefined) {
           chrome.storage.local.set({ activated: true }, () => {
             showModal(
-              "From now on, every time you access the Tik Tok feed, you will be prompted to set a time limit for yourself. The remaining time is visible on the bottom right-hand corner of the screen. Once your time is up, you will be prompted to close the app, but you may alternatively set an additional time limit for yourself and continue using Tik Tok.",
-              "disabled"
+              "From now on, every time you access the Tik Tok feed, you will be prompted to set a time limit for yourself. The remaining time is visible on the bottom right-hand corner of the screen. Once your time is up, you will be prompted to close the app, but you may alternatively set an additional time limit for yourself and continue using Tik Tok."
             );
             console.log("Intervention activated for the first time");
           });
@@ -293,7 +292,8 @@ chrome.storage.local.get().then((result) => {
         if (result.activated === true) {
           chrome.storage.local.set({ activated: false }, () => {
             showModal(
-              "The intervention has been disabled, feel free to use the app as you normally would for another week."
+              "The intervention has been disabled, feel free to use the app as you normally would for another week.",
+              "disabled"
             );
             console.log("Intervention disabled for the first time");
           });

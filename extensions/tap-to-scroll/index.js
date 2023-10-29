@@ -147,8 +147,7 @@ chrome.storage.local.get().then((result) => {
         if (result.activated === undefined) {
           chrome.storage.local.set({ activated: true }, () => {
             showModal(
-              "From now on, traditional scrolling methods will be disabled, and you can now navigate through posts by tapping the top half of the screen to move to the previous post and the bottom half to move to the next post. This new interaction aims to encourage a more deliberate and mindful browsing experience, allowing users to engage with content in a controlled and intentional manner.",
-              "disabled"
+              "From now on, traditional scrolling methods will be disabled, and you can now navigate through posts by tapping the top half of the screen to move to the previous post and the bottom half to move to the next post. This new interaction aims to encourage a more deliberate and mindful browsing experience, allowing users to engage with content in a controlled and intentional manner."
             );
             console.log("Intervention activated for the first time");
           });
@@ -191,7 +190,8 @@ chrome.storage.local.get().then((result) => {
         if (result.activated === true) {
           chrome.storage.local.set({ activated: false }, () => {
             showModal(
-              "The intervention has been disabled, feel free to use the app as you normally would for another week."
+              "The intervention has been disabled, feel free to use the app as you normally would for another week.",
+              "disabled"
             );
             console.log("Intervention disabled for the first time");
           });
