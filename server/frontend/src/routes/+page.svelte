@@ -133,7 +133,7 @@
 				<a
 					class=" underline"
 					href="https://drive.google.com/file/d/1eb6Xb25-2LV54AeiHnM37xRnm-cEAMWy/view?usp=drive_link"
-					>Click here for a video tutorial outlining the steps below</a
+					target="_blank">Click here for a video tutorial outlining the steps below</a
 				>
 			</div>
 
