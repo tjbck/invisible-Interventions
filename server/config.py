@@ -16,3 +16,5 @@ DB_CRED = os.environ.get("DB_CRED")
 DB_CLIENT = MongoClient(f"mongodb://{DB_CRED}@{DB_URL}/omr-scan?authSource=admin")
 
 DB = DB_CLIENT["tracking"]
+
+WEBHOOK_URL = os.environ.get("WEBHOOK_URL")
