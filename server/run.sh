@@ -1,5 +1,5 @@
-docker stop invisible-sfu || true
-docker rm invisible-sfu || true
-docker build -t invisible-sfu .
-docker run -d -p 3000:3030 --name invisible-sfu --restart always invisible-sfu
+docker stop invisible || true
+docker rm invisible || true
+docker build -t invisible .
+docker run -d -p 3000:3030 -v $(pwd):/app/sql_app.db --name invisible --restart always invisible
 docker image prune -f
