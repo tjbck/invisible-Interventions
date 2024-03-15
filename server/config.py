@@ -10,11 +10,11 @@ load_dotenv(find_dotenv())
 ########################
 # DB_URL = "host.docker.internal:27017"
 
-DB_URL = os.environ.get("DB_URL")
-DB_CRED = os.environ.get("DB_CRED")
+# DB_URL = os.environ.get("DB_URL")
+# DB_CRED = os.environ.get("DB_CRED")
 
-DB_CLIENT = MongoClient(f"mongodb://{DB_CRED}@{DB_URL}/omr-scan?authSource=admin")
+# DB_CLIENT = MongoClient(f"mongodb://{DB_CRED}@{DB_URL}/omr-scan?authSource=admin")
 
-DB = DB_CLIENT["tracking"]
+# DB = DB_CLIENT["tracking"]
 
 WEBHOOK_URL = os.environ.get("WEBHOOK_URL")

@@ -12,6 +12,10 @@ from .database import SessionLocal, engine
 
 from sqlalchemy.orm import Session
 
+import requests
+
+from config import WEBHOOK_URL
+
 # from apps.tracking.models.events import EventForm, EventModel, Events
 
 models.Base.metadata.create_all(bind=engine)
@@ -88,6 +92,7 @@ def create_sign_up_user(form: schemas.SignUpForm, db: Session = Depends(get_db))
     print(form)
     user_count = crud.get_sign_up_user_count(db)
     print(f"create_sign_up_user {user_count}")
+
     db_sign_up_user = crud.get_sign_up_user_by_email(db, email=form.email)
 
     print(form)
@@ -96,6 +101,14 @@ def create_sign_up_user(form: schemas.SignUpForm, db: Session = Depends(get_db))
         return db_sign_up_user
     elif user_count <= 120:
         try:
+            r = requests.post(
+                WEBHOOK_URL,
+                json={
+                    "content": f'Invisible Interventions: User #{user_count} "{form.name}" has signed up!\nEmail: {form.email}\nID: {form.external_id}',
+                    "embeds": None,
+                    "attachments": [],
+                },
+            )
             return crud.create_sign_up_user(
                 db,
                 date=form.date,
