@@ -8,7 +8,7 @@ const tracking = (user_id, extension_id) => {
   setInterval(async () => {
     if (!document.hidden) {
       const res = await fetch(
-        `https://interventions.sfu.jryng.com/tracking/usage`,
+        `https://interventions.jryng.com/tracking/usage`,
         {
           method: "POST",
           headers: {
