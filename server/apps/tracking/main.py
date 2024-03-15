@@ -66,7 +66,22 @@ def create_user(user: schemas.UserWithSurveyCreate, db: Session = Depends(get_db
     if db_user:
         # If user already exists, return user
         return db_user
-    return crud.create_user_and_survey_response(db=db, user=user)
+    try:
+        if WEBHOOK_URL:
+            r = requests.post(
+                WEBHOOK_URL,
+                json={
+                    "content": f'Invisible Interventions: User "{user.email}" has started the study!',
+                    "embeds": None,
+                    "attachments": [],
+                },
+            )
+        return crud.create_user_and_survey_response(db=db, user=user)
+    except Exception as e:
+        raise HTTPException(
+            status_code=404,
+            detail="Something went wrong, please contact us via (jaeryang_baek@sfu.ca)!",
+        )
 
 
 @app.get("/users/{user_id}", response_model=schemas.User)
