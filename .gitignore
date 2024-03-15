@@ -4,3 +4,4 @@ __pycache__
 _barebone
 .ipynb_checkpoints
 _barebone.zip
+.DS_Store

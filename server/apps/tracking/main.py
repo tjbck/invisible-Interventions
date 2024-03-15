@@ -95,13 +95,20 @@ def create_sign_up_user(form: schemas.SignUpForm, db: Session = Depends(get_db))
         # If user already exists, return user
         return db_sign_up_user
     elif user_count <= 120:
-        return crud.create_sign_up_user(
-            db,
-            date=form.date,
-            name=form.name,
-            email=form.email,
-            external_id=form.external_id,
-        )
+        try:
+            return crud.create_sign_up_user(
+                db,
+                date=form.date,
+                name=form.name,
+                email=form.email,
+                external_id=form.external_id,
+            )
+        except Exception as e:
+            raise HTTPException(
+                status_code=404,
+                detail="Something went wrong, please contact us via (jaeryang_baek@sfu.ca)!",
+            )
+
     else:
         raise HTTPException(
             status_code=404,
