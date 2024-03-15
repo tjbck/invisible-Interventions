@@ -21,9 +21,15 @@ def get_users(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.User).offset(skip).limit(limit).all()
 
 
-def create_sign_up_user(db: Session, date: str, name: str, email: str):
+def create_sign_up_user(
+    db: Session, date: str, name: str, email: str, external_id: str
+):
+
     db_signup_user = models.SignUpUser(
-        date=datetime.strptime(date, "%Y-%m-%d"), name=name, email=email
+        date=datetime.strptime(date, "%Y-%m-%d"),
+        name=name,
+        email=email,
+        external_id=external_id,
     )
 
     db.add(db_signup_user)
@@ -81,12 +87,14 @@ def create_exit_survey_response(db: Session, survey: schemas.ExitSurveyResponseC
         user_id=db_user.id,
         date=datetime.strptime(survey.date, "%Y-%m-%d"),
         intervention_uninstalled=survey.intervention_uninstalled,
-        uninstall_date=datetime.strptime(survey.uninstall_date, "%Y-%m-%d")
-        if survey.intervention_uninstalled
-        else None,
-        uninstall_reason=survey.uninstall_reason
-        if survey.intervention_uninstalled
-        else None,
+        uninstall_date=(
+            datetime.strptime(survey.uninstall_date, "%Y-%m-%d")
+            if survey.intervention_uninstalled
+            else None
+        ),
+        uninstall_reason=(
+            survey.uninstall_reason if survey.intervention_uninstalled else None
+        ),
         intervention_ux_impact=survey.intervention_ux_impact,
         mindless_consumption_changes=survey.mindless_consumption_changes,
         intervention_effect=survey.intervention_effect,

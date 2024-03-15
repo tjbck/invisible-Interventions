@@ -84,15 +84,23 @@ def read_user(user_id: int, db: Session = Depends(get_db)):
 
 @app.post("/users/signup")
 def create_sign_up_user(form: schemas.SignUpForm, db: Session = Depends(get_db)):
+
+    print(form)
     user_count = crud.get_sign_up_user_count(db)
     print(f"create_sign_up_user {user_count}")
     db_sign_up_user = crud.get_sign_up_user_by_email(db, email=form.email)
+
+    print(form)
     if db_sign_up_user:
         # If user already exists, return user
         return db_sign_up_user
     elif user_count <= 120:
         return crud.create_sign_up_user(
-            db, date=form.date, name=form.name, email=form.email
+            db,
+            date=form.date,
+            name=form.name,
+            email=form.email,
+            external_id=form.external_id,
         )
     else:
         raise HTTPException(

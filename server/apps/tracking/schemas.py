@@ -26,6 +26,7 @@ class SignUpForm(BaseModel):
     date: str
     name: str
     email: str
+    external_id: str
 
 
 #####################

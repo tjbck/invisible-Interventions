@@ -133,10 +133,10 @@ chrome.storage.local.get().then((result) => {
     if (
       (result.user_id % 2 == 0 &&
         Math.round(Date.now() / 1000) <
-          result.installation_timestamp + 60 * 60 * 24 * 7) ||
+          result.installation_timestamp + 60 * 60 * 24 * 2) ||
       (result.user_id % 2 == 1 &&
         Math.round(Date.now() / 1000) >
-          result.installation_timestamp + 60 * 60 * 24 * 7)
+          result.installation_timestamp + 60 * 60 * 24 * 2)
     ) {
       // Activate only if not already activated
       chrome.storage.local.get("activated", (result) => {

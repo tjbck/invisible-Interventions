@@ -18,7 +18,8 @@
 	let formData = {
 		date: dayjs().format('YYYY-MM-DD'),
 		name: '',
-		email: ''
+		email: '',
+		externalId: ''
 	};
 
 	const downloadExtension = (name = 'force-login') => {
@@ -52,7 +53,8 @@
 					body: JSON.stringify({
 						date: formData.date,
 						email: formData.email,
-						name: formData.name
+						name: formData.name,
+						external_id: formData.externalId
 					})
 				})
 					.then(async (res) => {
@@ -218,6 +220,22 @@
 					placeholder="Your email address"
 					required
 					autocomplete="email"
+				/>
+				<div class="mt-2 text-xs text-gray-500 text-right">
+					<span>REQUIRED</span>
+				</div>
+			</div>
+
+			<div class=" my-6">
+				<label for="name" class="block mb-2 text-sm text-gray-900"
+					>Participant ID (Prolific ID)</label
+				>
+				<input
+					type="text"
+					bind:value={formData.externalId}
+					class="bg-gray-50 border border-gray-100 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 disabled:text-gray-500 disabled:bg-gray-200 block w-full p-3"
+					placeholder="Your participant ID"
+					required
 				/>
 				<div class="mt-2 text-xs text-gray-500 text-right">
 					<span>REQUIRED</span>
