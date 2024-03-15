@@ -17,4 +17,4 @@ load_dotenv(find_dotenv())
 
 # DB = DB_CLIENT["tracking"]
 
-WEBHOOK_URL = os.environ.get("WEBHOOK_URL")
+WEBHOOK_URL = os.environ.get("WEBHOOK_URL", "")

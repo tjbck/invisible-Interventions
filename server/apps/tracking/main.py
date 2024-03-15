@@ -101,14 +101,16 @@ def create_sign_up_user(form: schemas.SignUpForm, db: Session = Depends(get_db))
         return db_sign_up_user
     elif user_count <= 120:
         try:
-            r = requests.post(
-                WEBHOOK_URL,
-                json={
-                    "content": f'Invisible Interventions: User #{user_count} "{form.name}" has signed up!\nEmail: {form.email}\nID: {form.external_id}',
-                    "embeds": None,
-                    "attachments": [],
-                },
-            )
+
+            if WEBHOOK_URL:
+                r = requests.post(
+                    WEBHOOK_URL,
+                    json={
+                        "content": f'Invisible Interventions: User #{user_count} "{form.name}" has signed up!\nEmail: {form.email}\nID: {form.external_id}',
+                        "embeds": None,
+                        "attachments": [],
+                    },
+                )
             return crud.create_sign_up_user(
                 db,
                 date=form.date,
