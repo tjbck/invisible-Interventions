@@ -200,6 +200,16 @@ def create_exit_survey(
             raise HTTPException(status_code=400, detail="Duplicate Response")
 
         else:
+
+            if WEBHOOK_URL:
+                r = requests.post(
+                    WEBHOOK_URL,
+                    json={
+                        "content": f'Invisible Interventions: User "{db_user.email}" has finished the exit survey!',
+                        "embeds": None,
+                        "attachments": [],
+                    },
+                )
             return crud.create_exit_survey_response(db=db, survey=form_data)
 
 
